@@ -19,7 +19,7 @@ If you found robotic eye to be useful, we would really appreciate if you could c
 
 ```
 
-- [2] Hamid Osooli, Amirhossein Nikoofard, and Zahra Shirmohammadi. "Game Theory for Eye Robot Movement: Approach and Hardware Implementation." In 2019 27th Iranian Conference on Electrical Engineering (ICEE 2019), Yazd, Iran, pp. 1081-1085. IEEE, 2019.
+- [2] Hamid Osooli, Amirhossein Nikoofard, and Zahra Shirmohammadi. "Game Theory for Eye Robot Movement: Approach and Hardware Implementation." In 2019 27th Iranian Conference on Electrical Engineering (ICEE 2019), Yazd, Iran, pp. 1081-1085. IEEE, 2019, DOI: 10.1109/IranianCEE.2019.8786637
 
 ```bibtex
 @inproceedings{osooli2019game,
@@ -28,7 +28,8 @@ If you found robotic eye to be useful, we would really appreciate if you could c
   booktitle={2019 27th Iranian Conference on Electrical Engineering (ICEE)},
   pages={1081--1085},
   year={2019},
-  organization={IEEE}
+  organization={IEEE},
+doi={10.1109/IranianCEE.2019.8786637}
 }
 
 ```
