@@ -29,7 +29,7 @@ If you found robotic eye to be useful, we would really appreciate if you could c
   pages={1081--1085},
   year={2019},
   organization={IEEE},
-doi={10.1109/IranianCEE.2019.8786637}
+  doi={10.1109/IranianCEE.2019.8786637}
 }
 
 ```
