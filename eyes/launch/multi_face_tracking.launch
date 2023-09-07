@@ -1,0 +1,57 @@
+
+<launch>
+        <arg name="topic_name" default="/pid_enable" />
+        <arg name="message" default="true" />
+
+
+
+        <node pkg="eyes"  type="left_display.py" name="left_display" output="screen"></node>
+
+        <node pkg="eyes"  type="right_display.py" name="right_display" output="screen"></node>
+
+       <node pkg="eyes" type="dual_face_detector.py" name="face_detector" output="screen"> </node>
+
+       <node pkg="eyes" type="decision_maker.py" name="decision_maker" output="screen"> </node>
+
+
+<!-- 
+       <node name="pid_enable" pkg="rostopic" type="rostopic" output="screen" args="pub $(arg topic_name) std_msgs/Bool 'data: $(arg message)'">  </node> -->
+        
+
+<!-- 
+        <node name="x_pid" pkg="pid" type="controller" >
+
+            <param name="Kp" value="0.55" />
+            <param name="Ki" value="0.01" />
+            <param name="Kd" value="0.01" />
+            <param name="upper_limit" value="500" />
+            <param name="lower_limit" value="-500" />
+            <param name="windup_limit" value="1000" />
+            <param name="max_loop_frequency" value="100.0" />
+            <param name="min_loop_frequency" value="100.0" />
+            <param name="setpoint_topic" value="setpoint_x" />
+            <param name="topic_from_plant" value="state_x" />
+            <param name="topic_from_controller" value="control_effort_x" />
+            
+        </node>
+
+        <node name="y_pid" pkg="pid" type="controller" >
+        
+            <param name="Kp" value="0.55" />
+            <param name="Ki" value="0.01" />
+            <param name="Kd" value="0.01" />
+            <param name="upper_limit" value="500" />
+            <param name="lower_limit" value="-500" />
+            <param name="windup_limit" value="1000" />
+            <param name="max_loop_frequency" value="100.0" />
+            <param name="min_loop_frequency" value="100.0" />
+            <param name="setpoint_topic" value="setpoint_y" />
+            <param name="topic_from_plant" value="state_y" />
+            <param name="topic_from_controller" value="control_effort_y" />
+            
+        </node>
+        
+
+        <node pkg="eyes" type="eye_mover.py" name="eye_mover" output="screen"> </node> -->
+
+</launch>

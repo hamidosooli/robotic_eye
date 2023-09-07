@@ -1,0 +1,24 @@
+
+<launch>
+
+        <node pkg="eyes"  type="left_display.py" name="left_display" output="screen"></node>
+
+        <node pkg="eyes"  type="right_display.py" name="right_display" output="screen"></node>
+        
+        <node pkg="image_view"  type="video_recorder" name="video_recorder_node_1" output="screen">
+            <param name="filename" value="/home/nakulj/Desktop/PeARL2023/Robot/src/eyes/data/videos/left.mp4"/>
+            <remap from="image" to="/camera/left/image_raw"/>
+            <param name="codec" type="string" value="mp4v" />
+        </node>
+
+        <node pkg="image_view"  type="video_recorder" name="video_recorder_node_2" output="screen">
+            <param name="filename" value="/home/nakulj/Desktop/PeARL2023/Robot/src/eyes/data/videos/right.mp4"/>
+            <remap from="image" to="/camera/right/image_raw"/>
+            <param name="codec" type="string" value="mp4v" />
+        </node>
+
+
+        <node pkg="eyes" type="dual_face_detector.py" name="face_detector" output="screen"> </node>
+        <node pkg="eyes" type="decision_maker.py" name="decision_maker" output="screen"> </node>
+
+</launch>

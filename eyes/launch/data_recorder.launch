@@ -1,0 +1,32 @@
+
+<launch>
+
+
+        <!-- <node pkg="eyes"  type="left_display.py" name="left_display" output="screen"></node>
+
+        <node pkg="eyes"  type="right_display.py" name="right_display" output="screen"></node> -->
+
+        <node name="left_publisher" pkg="eyes" type="avi_to_ros.py" output="screen">
+            <param name="image_topic" value="/camera/left/image_raw"/>
+            <param name="avi_file_path" value="/home/nakulj/Desktop/PeARL2023/Robot/src/eyes/data/videos/left.mp4"/>
+        </node>
+
+        <node name="right_publisher" pkg="eyes" type="avi_to_ros.py" output="screen">
+            <param name="image_topic" value="/camera/right/image_raw"/>
+            <param name="avi_file_path" value="/home/nakulj/Desktop/PeARL2023/Robot/src/eyes/data/videos/right.mp4"/>
+        </node>
+
+
+
+
+       <node pkg="eyes" type="dual_face_detector.py" name="face_detector" output="screen"> 
+       </node>
+
+       <node pkg="eyes" type="decision_maker.py" name="decision_maker" output="screen"> </node>
+
+       <!-- <node pkg="eyes" type="data_recorder.py" name="data_recorder" output="screen"> </node> -->
+
+
+
+</launch>
+

@@ -40,8 +40,18 @@ class Display:
           #reads frame
           ret, frame = self.capture.read()
 
-          #publishes image and calibration data
-          self.imagePub.publish(self.bridge.cv2_to_imgmsg(frame, 'bgr8'))
+          #resize frame
+          frame = cv2.resize(frame, (480, 480))
+
+          # Create a ROS timestamp for the current time
+          current_time = rospy.Time.now()
+
+        # Create the Image message with the timestamp
+          image_msg = self.bridge.cv2_to_imgmsg(frame, 'bgr8')
+          image_msg.header.stamp = current_time
+
+        # Publish the image
+          self.imagePub.publish(image_msg)
           camera_info_msg = yaml_to_CameraInfo(self.metadataPath)
           self.infoPub.publish(camera_info_msg)
 

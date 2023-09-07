@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 
+from os import name
 import roslib
 import sys
 import rospy
@@ -28,16 +29,24 @@ class Detector:
 
 
         # publishes the x and y states and setpoints for the pid packages to output an x and y control effort
-        self.state_x_pub = rospy.Publisher("state_x",Float64,queue_size=1)
-        self.state_y_pub = rospy.Publisher("state_y",Float64,queue_size=1)
+        self.state_x_pub = rospy.Publisher("state_x_left",Float64,queue_size=1)
+        self.state_y_pub = rospy.Publisher("state_y_left",Float64,queue_size=1)
         self.setpoint_x = rospy.Publisher("setpoint_x",Float64,queue_size=1)
         self.setpoint_y = rospy.Publisher("setpoint_y",Float64,queue_size=1)
 
+        self.state_x_pub_right = rospy.Publisher("state_x_right",Float64,queue_size=1)
+        self.state_y_pub_right = rospy.Publisher("state_y_right",Float64,queue_size=1)
+
+        self.confidence_right = rospy.Publisher("confidence_right",Float64,queue_size=1)
+        self.confidence_left = rospy.Publisher("confidence_left",Float64,queue_size=1)
 
         #subcriber for the image publisher
         #right now it only uses the left image to detect faces
         self.bridge = CvBridge()
-        self.limage_sub = message_filters.Subscriber("/camera/left/image_raw",Image, queue_size=1, buff_size=2**24).registerCallback(self.callback)
+        self.limage_sub = message_filters.Subscriber("/camera/left/image_raw",Image, queue_size=1, buff_size=2**24)
+        self.rimage_sub = message_filters.Subscriber("/camera/right/image_raw",Image, queue_size=1, buff_size=2**24)
+
+        self.ts = message_filters.ApproximateTimeSynchronizer([self.limage_sub, self.rimage_sub], queue_size=1, slop=0.2, allow_headerless=True).registerCallback(self.callback)
         
     
         
@@ -48,23 +57,31 @@ class Detector:
     
 
 
-        #subscribes to and stores depth of the face
-        self.depth_sub = message_filters.Subscriber("face_depth",Float64, queue_size=1).registerCallback(self.depthCallback)
-        self.depth = 0
+        self.leader_sub = message_filters.Subscriber("leader",String, queue_size=1).registerCallback(self.leaderCallback)
+        self.leader = "left"
+
+    def leaderCallback(self, data):
+        self.leader = data.data
         
 
-    #callback to store the face depth estimate
-    def depthCallback(self, data):
-        if not math.isnan(data.data):
-            self.depth = data.data
 
     #callback for the left camera image 
     #does all the face detection stuff
-    def callback(self,left):
+    def callback(self, left_image, right_image):
+
+        if self.leader == "left":
+            left = "leader"
+            right = "follower"
+        else:
+            left = "follower"
+            right = "leader"
+
+
+        color = (0, 255, 0)
 
         #gets the image
         try:
-            cv_image_left = CvBridge().imgmsg_to_cv2(left)
+            cv_image_left = CvBridge().imgmsg_to_cv2(left_image)
         except CvBridgeError as e:
             print(e)
 
@@ -77,14 +94,12 @@ class Detector:
 
         #labels each face with a green rectangle and the depth  
         for (classid, confidence, box) in zip(class_ids, confidences, boxes):
-            color = (0, 255, 0)
+            
             cv2.rectangle(cv_image_left, box, color, 2)
             cv2.rectangle(cv_image_left, (box[0], box[1]), (box[0] + box[2], box[1]+box[3]), color)
-            cv2.putText(cv_image_left, "", (box[0], box[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,0,0))
+            cv2.putText(cv_image_left, left, (box[0], box[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.5, color)
 
-        #shows image
-        cv2.imshow("images", cv_image_left)
-        cv2.waitKey(1)
+        
 
 
         #takes the first detected face and publishes x and y values to state topic
@@ -94,26 +109,112 @@ class Detector:
 
             #creates x and y state messages
             msg_state_x = Float64()
-            msg_state_x.data = point[0] + (point[2]/2)
+            msg_state_x.data = point[0] + (point[2]/2) - 240
 
             msg_state_y = Float64()
-            msg_state_y.data = point[1] + (point[3]/2)
+            msg_state_y.data = point[1] + (point[3]/2) - 240 
 
-            #creates the x and y setpoint messages which will be the center of the frame
-            msg_setpoint_x = Float64()
-            msg_setpoint_x.data = 320
+            confidence_left = Float64()
+            confidence_left.data = confidences[0]
 
-            msg_setpoint_y = Float64()
-            msg_setpoint_y.data = 240
+            
+        else:
+            #creates x and y state messages for full occlusion
+            msg_state_x = Float64()
+            msg_state_x.data = 1000
 
-            try:
-                #publishes states and setpoints
-                self.state_x_pub.publish(msg_state_x)
-                self.state_y_pub.publish(msg_state_y)
-                self.setpoint_x.publish(msg_setpoint_x)
-                self.setpoint_y.publish(msg_setpoint_y)
-            except Exception as e:
+            msg_state_y = Float64()
+            msg_state_y.data = 1000
+
+            confidence_left = Float64()
+            confidence_left.data = 0
+
+
+        try:
+            #publishes states and setpoints
+            self.state_x_pub.publish(msg_state_x)
+            self.state_y_pub.publish(msg_state_y) 
+            self.confidence_left.publish(confidence_left)
+            
+        except Exception as e:
                 print(e)
+
+
+
+        #gets the image
+        try:
+            cv_image_right = CvBridge().imgmsg_to_cv2(right_image)
+        except CvBridgeError as e:
+            print(e)
+
+
+        #formats and detects faces
+        input = self.format_yolov5(cv_image_right)
+        output = self.detect(input, self.net)
+        class_ids, confidences, boxes = self.wrap_detection(input, output[0])
+
+
+        #labels each face with a green rectangle and the depth  
+        for (classid, confidence, box) in zip(class_ids, confidences, boxes):
+            cv2.rectangle(cv_image_right, box, color, 2)
+            cv2.rectangle(cv_image_right, (box[0], box[1]), (box[0] + box[2], box[1]+box[3]), color)
+            cv2.putText(cv_image_right, right, (box[0], box[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.5, color)
+
+        
+
+
+        #takes the first detected face and publishes x and y values to state topic
+        if len(boxes) != 0:
+            #takes the first face
+            point = boxes[0]
+
+            #creates x and y state messages
+            msg_state_x = Float64()
+            msg_state_x.data = point[0] + (point[2]/2) - 240
+
+            msg_state_y = Float64()
+            msg_state_y.data = point[1] + (point[3]/2) - 240
+
+            confidence_right = Float64()
+            confidence_right.data = confidences[0]
+
+        else:
+            #creates x and y state messages for full occlusion
+            msg_state_x = Float64()
+            msg_state_x.data = 1000
+
+            msg_state_y = Float64()
+            msg_state_y.data = 1000
+
+            confidence_right = Float64()
+            confidence_right.data = 0
+
+
+        
+
+        
+
+
+        #creates the x and y setpoint messages which will be the center of the frame
+        msg_setpoint_x = Float64()
+        msg_setpoint_x.data = 0
+
+        msg_setpoint_y = Float64()
+        msg_setpoint_y.data = 0
+
+        try:
+            #publishes states and setpoints
+            self.state_x_pub_right.publish(msg_state_x)
+            self.state_y_pub_right.publish(msg_state_y)
+            self.confidence_right.publish(confidence_right)
+            self.setpoint_x.publish(msg_setpoint_x)
+            self.setpoint_y.publish(msg_setpoint_y)
+        except Exception as e:
+                print(e)
+        
+        #shows image
+        cv2.imshow("images", cv2.hconcat([cv_image_left, cv_image_right]))
+        cv2.waitKey(1)
 
 
 
@@ -159,8 +260,8 @@ class Detector:
 
             confidence = row[4]
 
-            #checks for at least 0.1 confidence on face detection
-            if confidence >= 0.1:
+            #checks for at least 0.4 confidence on face detection
+            if confidence >= 0.4:
 
                 
                 classes_scores = row[5:]
