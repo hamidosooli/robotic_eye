@@ -7,7 +7,7 @@ Download the XL_320 Toolbox [here](https://github.com/hamidosooli/XL_320Toolbox)
 
 1. Overview
 
-The robotic_eye_ros_pkg directory contains the ROS package for using the Eye Robot. With this package, the robot is able to track any face within the camera's field of vision and center that face on the frame. The robot is also able to estimate the depth of the face using stereo vision. This package is tested on ROS Nowtic and Ubuntu 20.04LTS.
+The robotic_eye_ros_pkg directory contains the ROS package for using the Eye Robot. With this package, the robot is able to track any face within the camera's field of vision and center that face on the frame. The robot is also able to estimate the depth of the face using stereo vision. This package is tested on ROS Noetic and Ubuntu 20.04LTS.
 
 
 
