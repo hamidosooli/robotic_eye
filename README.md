@@ -56,6 +56,19 @@ center.py - a python executable file that sets all the servo positions to 512 to
 
 robot.py - contains a robot class to organize all the hardware writes
 
+
+&nbsp;
+
+6. Running the scripts
+
+Change to the main directory  --> cd ~/robotic_eye_wksp/
+
+Source the workspace --> source devel/setup.bash
+
+Launch the relevant launch file --> roslaunch eyes data_recorder.launch
+
+&nbsp;
+
 ## Citation
 
 If you found robotic eye to be useful, we would really appreciate if you could cite our work:
