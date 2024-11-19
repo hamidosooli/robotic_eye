@@ -96,10 +96,20 @@ If you found robotic eye to be useful, we would really appreciate if you could c
   booktitle={2019 27th Iranian Conference on Electrical Engineering (ICEE)},
   pages={1081--1085},
   year={2019},
-  organization={IEEE},
-  doi={10.1109/IranianCEE.2019.8786637}
-}
-
 ```
+
+- [2] Hamid Osooli, Amirhossein Nikoofard, and Zahra Shirmohammadi. "Game Theory for Eye Robot Movement: Approach and Hardware Implementation." In 2019 27th Iranian Conference on Electrical Engineering (ICEE 2019), Yazd, Iran, pp. 1081-1085. IEEE, 2019, DOI: 10.1109/IranianCEE.2019.8786637
+
+```bibtex
+@article{osooli2024releaf,
+  title={Releaf: An Efficient Method for Real-Time Occlusion Handling by Game Theory},
+  author={Osooli, Hamid and Joshi, Nakul and Khurana, Pranav and Nikoofard, Amirhossein and Shirmohammadi, Zahra and Azadeh, Reza},
+  journal={Sensors},
+  volume={24},
+  number={17},
+  pages={5727},
+  year={2024},
+  publisher={MDPI}
+}
 
 
