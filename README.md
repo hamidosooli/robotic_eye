@@ -73,7 +73,22 @@ Launch the relevant launch file --> roslaunch eyes data_recorder.launch
 
 If you found robotic eye to be useful, we would really appreciate if you could cite our work:
 
-- [1] Hamid Osooli, Mohsen Irani Rahaghi, S. Reza Ahmadzadeh, "Design and Evaluation of a Bioinspired Tendon-Driven 3D-Printed Robotic Eye with Active Vision Capabilities," In Proc.  20th International Conference on Ubiquitous Robots (UR 2023), Honolulu, Hawaii, pp. 747-752, Jun. 25-28, 2023.
+- [1] Hamid Osooli, Nakul Joshi, Pranav Khurana, Amirhossein Nikoofard, Zahra Shirmohammadi, and Reza Azadeh, "Releaf: An Efficient Method for Real-Time Occlusion Handling by Game Theory," Sensors 24, no. 17: 5727, 2024.
+
+```bibtex
+@article{osooli2024releaf,
+  title={Releaf: An Efficient Method for Real-Time Occlusion Handling by Game Theory},
+  author={Osooli, Hamid and Joshi, Nakul and Khurana, Pranav and Nikoofard, Amirhossein and Shirmohammadi, Zahra and Azadeh, Reza},
+  journal={Sensors},
+  volume={24},
+  number={17},
+  pages={5727},
+  year={2024},
+  publisher={MDPI}
+}
+```
+
+- [2] Hamid Osooli, Mohsen Irani Rahaghi, S. Reza Ahmadzadeh, "Design and Evaluation of a Bioinspired Tendon-Driven 3D-Printed Robotic Eye with Active Vision Capabilities," In Proc.  20th International Conference on Ubiquitous Robots (UR 2023), Honolulu, Hawaii, pp. 747-752, Jun. 25-28, 2023.
 
 ```bibtex
 @inproceedings{osooli2023design,
@@ -87,7 +102,7 @@ If you found robotic eye to be useful, we would really appreciate if you could c
 
 ```
 
-- [2] Hamid Osooli, Amirhossein Nikoofard, and Zahra Shirmohammadi. "Game Theory for Eye Robot Movement: Approach and Hardware Implementation." In 2019 27th Iranian Conference on Electrical Engineering (ICEE 2019), Yazd, Iran, pp. 1081-1085. IEEE, 2019, DOI: 10.1109/IranianCEE.2019.8786637.
+- [3] Hamid Osooli, Amirhossein Nikoofard, and Zahra Shirmohammadi. "Game Theory for Eye Robot Movement: Approach and Hardware Implementation." In 2019 27th Iranian Conference on Electrical Engineering (ICEE 2019), Yazd, Iran, pp. 1081-1085. IEEE, 2019, DOI: 10.1109/IranianCEE.2019.8786637.
 
 ```bibtex
 @inproceedings{osooli2019game,
@@ -98,18 +113,6 @@ If you found robotic eye to be useful, we would really appreciate if you could c
   year={2019},
 ```
 
-- [3] Hamid Osooli, Nakul Joshi, Pranav Khurana, Amirhossein Nikoofard, Zahra Shirmohammadi, and Reza Azadeh, "Releaf: An Efficient Method for Real-Time Occlusion Handling by Game Theory," Sensors 24, no. 17: 5727, 2024.
 
-```bibtex
-@article{osooli2024releaf,
-  title={Releaf: An Efficient Method for Real-Time Occlusion Handling by Game Theory},
-  author={Osooli, Hamid and Joshi, Nakul and Khurana, Pranav and Nikoofard, Amirhossein and Shirmohammadi, Zahra and Azadeh, Reza},
-  journal={Sensors},
-  volume={24},
-  number={17},
-  pages={5727},
-  year={2024},
-  publisher={MDPI}
-}
 
 
